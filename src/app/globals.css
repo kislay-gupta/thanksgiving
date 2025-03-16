@@ -161,6 +161,10 @@
   .user-avatar {
     @apply rounded-full border-2 border-border overflow-hidden;
   }
+  
+  .sidebar-link-active {
+    @apply bg-thanksgiving-light text-thanksgiving-text;
+  }
 }
 
 @layer utilities {
