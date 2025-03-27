@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import NextTopLoader from "nextjs-toploader";
 
 import "./globals.css";
 import Header from "@/components/shared/Header";
-import Sidebar from "@/components/shared/Sidebar";
+import { Toaster } from "@/components/ui/sonner";
+// import Sidebar from "@/components/shared/Sidebar";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -26,12 +28,12 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
       <body className="bg-white">
+        <NextTopLoader />
+        <Toaster expand position="top-right" richColors />
         <Header />
-        <div className="flex min-h-screen">
-          <Sidebar />
-          <main className="flex-1 ml-16 px-6 py-4 max-w-7xl mx-auto">
-            {children}
-          </main>
+        <div className="flex min-h-screen pt-14">
+          {/* <Sidebar /> */}
+          <main className="flex-1">{children}</main>
         </div>
       </body>
     </html>

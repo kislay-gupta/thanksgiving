@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { SearchIcon, Bell, UserCircle, Menu, X } from "lucide-react";
+import { SearchIcon, Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 
@@ -9,13 +9,13 @@ const Header: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 bg-white border-b border-thanksgiving-border">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-14">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-sm">
+      <div className="max-w-7xl mx-auto px-4 bg-transparent  sm:px-6 flex items-center justify-between h-14">
         {/* Logo */}
         <div className="flex items-center">
           <Link href="/" className="flex items-center">
-            <span className="text-thanksgiving-blue font-bold text-xl">
-              thanksgiving
+            <span className="text-blue-600 font-bold text-xl">
+              GratitudeSphere
             </span>
           </Link>
         </div>
