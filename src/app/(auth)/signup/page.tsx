@@ -464,40 +464,37 @@ const SignupPage = () => {
   return (
     <>
       <div
-        className="min-h-full w-full bg-cover bg-center relative" // Removed -mt-16
+        className="min-h-full w-full bg-cover lg:bg-center relative" // Removed -mt-16
         style={{ backgroundImage: `url('/pc1.jpeg')` }}
       >
         {/* Overlay */}
         <div className="absolute inset-0 bg-black/40"></div>
 
         {/* Content */}
-        <div className="relative z-10 flex items-center justify-around min-h-screen w-full px-6 py-8">
+        <div className="relative z-10 flex flex-col md:flex-row items-center justify-between mx-auto min-h-screen w-full px-4 md:px-6 py-8">
           {/* Left side quote */}
-          <div className="text-white text-start max-w-md font-['Abril_Fatface'] space-y-4">
-            <h2 className="text-6xl sm:text-7xl font-normal leading-tight">
+          <div className="text-white text-center md:text-start md:ml-12 max-w-md font-['Abril_Fatface'] space-y-4 mb-8 md:mb-0">
+            <h2 className="text-4xl md:text-6xl 2xl:text-7xl font-normal leading-tight">
               &ldquo;in everything give thanks;&rdquo;
             </h2>
-            <p className="text-xl text-white font-normal font-['Outfit']">
+            <p className="text-lg md:text-xl text-white font-normal font-['Outfit']">
               FOR THIS IS THE WILL OF GOD IN CHRIST JESUS FOR YOU.
             </p>
-            <p className="flex items-center gap-2 font-semibold">
+            <p className="flex items-center justify-center md:justify-start gap-2 font-semibold">
               <FaBookmark className="text-red-600" />1 Thessalonians 5:18 NKJV
             </p>
           </div>
 
           {/* Form */}
-          <div className="bg-white/10 backdrop-blur-sm p-8 rounded-xl shadow-xl max-w-md w-full">
+          <div className=" md:bg-transparent mx-auto p-4 md:p-8 rounded-xl max-w-md w-full">
             <div className="mb-6">
-              <h1 className="text-blue-500 text-4xl font-bold font-['Outfit'] mb-4">
-                GratitudeSphere
-              </h1>
               <h3 className="text-xl font-semibold text-white mb-2">
                 Create an Account
               </h3>
               <p className="text-sm text-white/80">
                 Already have an account?{" "}
                 <Link
-                  href="/"
+                  href="/login"
                   className="text-blue-400 hover:text-blue-300 underline"
                 >
                   Log in

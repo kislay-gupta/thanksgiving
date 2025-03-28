@@ -4,7 +4,6 @@ import { FaBookmark, FaEye, FaEyeSlash } from "react-icons/fa";
 import { motion } from "framer-motion";
 import useLoader from "@/hooks/user-loader";
 import { baseUrl } from "@/constant";
-import axios from "axios";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -54,32 +53,32 @@ const LoginPage = () => {
 
     startLoading();
     try {
-      const response = await axios.post(`${baseUrl}/api/login/`, formData, {
-        withCredentials: true,
+      const response = await fetch(`${baseUrl}/api/login/`, {
+        method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
         },
+        body: JSON.stringify(formData),
       });
 
-      // Log the actual response data structure to understand what we're receiving
-      console.log("Response data structure:", response);
+      const data = await response.json();
+      console.log("Response data structure:", data);
 
-      if (response.status === 200 && response.data) {
-        // Manually set the cookies since they're not being set automatically
+      if (response.ok && data) {
         const cookies = new Cookies();
 
-        // Check for different possible token formats in the response
         const accessToken =
-          response.data.access ||
-          response.data.access_token ||
-          response.data.token ||
-          (response.data.tokens && response.data.tokens.access);
+          data.access ||
+          data.access_token ||
+          data.token ||
+          (data.tokens && data.tokens.access);
 
         const refreshToken =
-          response.data.refresh ||
-          response.data.refresh_token ||
-          (response.data.tokens && response.data.tokens.refresh);
+          data.refresh ||
+          data.refresh_token ||
+          (data.tokens && data.tokens.refresh);
 
         if (accessToken) {
           console.log(
@@ -106,7 +105,6 @@ const LoginPage = () => {
           });
         }
 
-        // Verify cookies were set
         console.log("Cookies after setting:", {
           access: cookies.get("access_token"),
           refresh: cookies.get("refresh_token"),
@@ -116,22 +114,8 @@ const LoginPage = () => {
         router.push("/");
       }
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        if (error.response) {
-          const errorData = error.response.data;
-          if (typeof errorData === "object") {
-            Object.entries(errorData).forEach(([field, message]) => {
-              toast.error(`${field}: ${message}`);
-            });
-          } else {
-            toast.error(errorData.toString());
-          }
-        } else if (error.request) {
-          toast.error("Network error. Please check your connection.");
-        } else {
-          toast.error("An unexpected error occurred.");
-        }
-      }
+      console.error("Error during login:", error);
+      toast.error("An unexpected error occurred.");
     } finally {
       stopLoading();
     }
@@ -139,29 +123,26 @@ const LoginPage = () => {
 
   return (
     <div
-      className="relative h-screen w-full bg-cover bg-center"
+      className="relative h-screen w-full  bg-no-repeat bg-cover bg-accent lg:bg-center"
       style={{ backgroundImage: `url('/pc1.jpeg')` }}
     >
       <div className="absolute inset-0 bg-black/20"></div>
 
-      <div className="relative z-10 flex items-center justify-around h-full w-full p-10">
-        <div className="text-white text-start max-w-md font-['Abril_Fatface']">
-          <h2 className="text-7xl font-normal leading-tight">
+      <div className="relative z-10 flex flex-col md:flex-row items-center justify-center md:justify-between mx-auto min-h-screen w-full px-4 md:px-6 py-4 md:py-8">
+        <div className="text-white text-center md:text-start md:ml-12 max-w-md font-['Abril_Fatface'] space-y-4 mb-8 md:mb-0">
+          <h2 className="text-4xl md:text-6xl 2xl:text-7xl font-normal leading-tight">
             &ldquo;in everything give thanks;&rdquo;
           </h2>
-          <p className="text-white font-normal font-['Outfit']">
+          <p className="text-lg md:text-xl text-white font-normal font-['Outfit']">
             FOR THIS IS THE WILL OF GOD IN CHRIST JESUS FOR YOU.
           </p>
-          <p className="mt-2 flex gap-1 font-semibold">
+          <p className="flex items-center justify-center md:justify-start gap-2 font-semibold">
             <FaBookmark className="text-red-600 my-auto" />1 Thessalonians 5:18
             NKJV
           </p>
         </div>
 
-        <div className="bg-white/5 p-8 rounded-lg font-['Poppins'] max-w-5/12 w-full">
-          <div className="justify-start text-blue-600 text-4xl font-bold font-['Outfit'] [text-shadow:_0px_4px_4px_rgb(0_0_0_/_0.25)]">
-            GratitudeSphere
-          </div>
+        <div className=" md:bg-transparent mx-auto p-4 md:p-8 rounded-xl max-w-md w-full">
           <h3 className="text-xl font-semibold text-white">Welcome Back</h3>
           <p className="text-sm p-0.5 text-white">
             Don&apos;t have an account?{" "}

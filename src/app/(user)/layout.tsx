@@ -1,4 +1,4 @@
-import AdminRoute from "@/components/protected-route";
+// import AdminRoute from "@/components/protected-route";
 import React from "react";
 
 export default function AdminLayout({
@@ -6,5 +6,5 @@ export default function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <AdminRoute>{children}</AdminRoute>;
+  return <>{children}</>;
 }

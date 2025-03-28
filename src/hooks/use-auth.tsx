@@ -1,17 +1,20 @@
+// app/hooks/useAuth.js
 "use client";
+
 import { useState, useEffect } from "react";
 import Cookies from "universal-cookie";
 
 export const useAuth = () => {
+  // Create an instance of universal-cookie
   const cookies = new Cookies();
 
-  // Improved token retrieval with debugging
+  // Function to get the access token from cookies
   const getToken = () => {
     try {
       const accessToken = cookies.get("access_token");
       console.log("Raw access token:", accessToken);
 
-      // More robust token validation
+      // Validate token to ensure it exists and is not a falsy value
       if (
         accessToken &&
         accessToken !== "undefined" &&
@@ -27,10 +30,10 @@ export const useAuth = () => {
     }
   };
 
-  // Initialize state with token check
-  const [token, setToken] = useState<string | null>(() => getToken());
+  // Initialize state with the token from cookies
+  const [token, setToken] = useState(() => getToken());
 
-  // Add useEffect for additional debugging and state sync
+  // Use an effect to periodically check if the token has changed
   useEffect(() => {
     const checkToken = () => {
       const currentToken = getToken();
@@ -41,29 +44,30 @@ export const useAuth = () => {
       }
     };
 
-    // Check token periodically
+    // Check token every second
     const intervalId = setInterval(checkToken, 1000);
 
-    // Initial check
+    // Run an initial check
     checkToken();
 
-    // Cleanup interval
+    // Cleanup the interval on component unmount
     return () => clearInterval(intervalId);
-  }, []);
+  }, [token]);
 
+  // Function to explicitly reload the token
   const loadToken = () => {
     const storedToken = getToken();
     console.log("Loading token:", storedToken);
-
     if (storedToken) {
       setToken(storedToken);
     }
     return storedToken;
   };
 
+  // Function to remove the tokens from cookies (simulate logout)
   const removeToken = () => {
     try {
-      // Remove tokens with more specific path handling
+      // Remove tokens with the path specified
       cookies.remove("access_token", { path: "/" });
       cookies.remove("refresh_token", { path: "/" });
       setToken(null);
@@ -73,7 +77,7 @@ export const useAuth = () => {
     }
   };
 
-  // Enhanced authentication check
+  // Check authentication based on the current token
   const isAuthenticated = (() => {
     const currentToken = getToken();
     const authenticated =
@@ -81,10 +85,8 @@ export const useAuth = () => {
       currentToken !== "undefined" &&
       currentToken !== "null" &&
       currentToken.trim() !== "";
-
     console.log("Is Authenticated:", authenticated);
     console.log("Current Token:", currentToken);
-
     return authenticated;
   })();
 
