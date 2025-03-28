@@ -1,48 +1,54 @@
 "use client";
 import React from "react";
+import {
+  Home,
+  Users,
+  Compass,
+  Bell,
+  Bookmark,
+  PlusCircleIcon,
+} from "lucide-react";
 import Link from "next/link";
-import { Home, BookHeart, Users, Calendar, Camera, Laptop, Search, Plus } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 const Sidebar = () => {
-  const categories = [
-    { name: "Home", href: "/", icon: Home },
-    { name: "Gratitude", href: "/category/gratitude", icon: BookHeart },
-    { name: "Personal Stories", href: "/category/personal-stories", icon: Users },
-    { name: "Daily Prompts", href: "/category/daily-prompts", icon: Calendar },
-    { name: "Photography", href: "/category/photography", icon: Camera },
-    { name: "Technology", href: "/category/technology", icon: Laptop },
+  const pathname = usePathname();
+  const menuItems = [
+    { icon: <Home size={20} />, label: "Home", href: "/" },
+    { icon: <Users size={20} />, label: "Communities", href: "/communities" },
+    { icon: <Compass size={20} />, label: "Explore", href: "/explore" },
+    {
+      icon: <Bell size={20} />,
+      label: "Notifications",
+      href: "/notifications",
+    },
+    { icon: <Bookmark size={20} />, label: "Bookmarks", href: "/bookmarks" },
+    {
+      icon: <PlusCircleIcon size={20} />,
+      label: "Create a Post",
+      href: "/bookmarks",
+    },
   ];
 
   return (
-    <aside className="fixed left-0 top-14 h-[calc(100vh-3.5rem)] w-16 bg-black flex flex-col items-center py-4">
-      <div className="flex-1 flex flex-col items-center space-y-6">
-        {categories.map((category) => {
-          const Icon = category.icon;
-          return (
-            <Link
-              key={category.name}
-              href={category.href}
-              className="text-white/70 hover:text-white transition-colors p-3 rounded-lg hover:bg-white/10"
-              title={category.name}
+    <aside className="fixed md:relative bottom-0 left-0 right-0 md:bottom-auto  bg-white md:bg-transparent z-50 md:flex flex-col border-r h-auto md:h-[calc(100vh-4rem)] md:sticky md:top-16 w-full md:w-16 items-center py-2 md:py-4">
+      <div className="max-w-screen-sm mx-auto px-4 md:px-0 md:w-auto flex md:flex-col justify-between md:justify-start ">
+        {menuItems.map((item, index) => (
+          <Link
+            key={index}
+            href={item.href}
+            className="flex flex-col items-center justify-center p-2 md:p-3 hover:bg-gray-800 md:hover:bg-gray-100 rounded-lg md:mb-2"
+            title={item.label}
+          >
+            <div
+              className={`${
+                pathname === item.href ? "text-blue-500" : "text-gray-700"
+              }`}
             >
-              <Icon size={20} />
-            </Link>
-          );
-        })}
-      </div>
-      <div className="mt-auto flex flex-col items-center space-y-4 mb-4">
-        <button
-          className="text-white/70 hover:text-white transition-colors p-3 rounded-lg hover:bg-white/10"
-          title="Search"
-        >
-          <Search size={20} />
-        </button>
-        <button
-          className="text-white/70 hover:text-white transition-colors p-3 rounded-lg hover:bg-white/10"
-          title="Add New"
-        >
-          <Plus size={20} />
-        </button>
+              {item.icon}
+            </div>
+          </Link>
+        ))}
       </div>
     </aside>
   );

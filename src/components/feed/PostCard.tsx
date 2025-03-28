@@ -1,6 +1,7 @@
 import React from "react";
 import { MessageSquare, RefreshCw, Heart, Share2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 interface PostProps {
   user: {
@@ -23,9 +24,11 @@ const Post = ({ user, content, image, video, stats, className }: PostProps) => {
   return (
     <div className={cn("border-b p-4", className)}>
       <div className="flex items-start space-x-3">
-        <img
+        <Image
           src={user.avatar}
           alt={user.name}
+          width={40}
+          height={40}
           className="w-10 h-10 rounded-full"
         />
         <div className="flex-1">
@@ -40,11 +43,13 @@ const Post = ({ user, content, image, video, stats, className }: PostProps) => {
           <p className="mt-2 text-gray-800">{content}</p>
 
           {image && (
-            <div className="mt-3 rounded-xl overflow-hidden relative">
-              <img
+            <div className="mt-3 rounded-xl overflow-hidden relative max-h-[512px]">
+              <Image
                 src={image}
                 alt="Post image"
-                className="w-full object-cover"
+                width={800}
+                height={450}
+                className="w-full h-full object-contain"
               />
               {video && (
                 <div className="absolute bottom-2 right-2 bg-blue-600 text-white text-xs px-2 py-1 rounded">
