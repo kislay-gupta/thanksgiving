@@ -123,7 +123,7 @@ const LoginPage = () => {
 
   return (
     <div
-      className="relative h-screen w-full  bg-no-repeat bg-cover bg-accent lg:bg-center"
+      className="relative h-screen w-full bg-[position:12%]  bg-no-repeat bg-cover  bg-accent lg:bg-center"
       style={{ backgroundImage: `url('/pc1.jpeg')` }}
     >
       <div className="absolute inset-0 bg-black/20"></div>

@@ -464,7 +464,7 @@ const SignupPage = () => {
   return (
     <>
       <div
-        className="min-h-full w-full bg-cover lg:bg-center relative" // Removed -mt-16
+        className="min-h-full w-full bg-cover bg-[position:12%] lg:bg-center relative"
         style={{ backgroundImage: `url('/pc1.jpeg')` }}
       >
         {/* Overlay */}
