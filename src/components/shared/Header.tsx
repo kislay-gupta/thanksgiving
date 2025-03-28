@@ -53,7 +53,7 @@ const Header: React.FC = () => {
         </div>
 
         {/* Mobile menu button */}
-        <div className="md:hidden flex items-center">
+        <div className="hidden">
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="p-2 rounded-full text-thanksgiving-secondaryText hover:bg-thanksgiving-light transition-colors"
@@ -64,25 +64,6 @@ const Header: React.FC = () => {
       </div>
 
       {/* Mobile search & menu */}
-      {mobileMenuOpen && (
-        <div className="md:hidden bg-white border-t border-thanksgiving-border animate-fade-in-up">
-          <div className="px-4 py-3">
-            <div className="relative mb-3">
-              <input
-                type="text"
-                placeholder="Search"
-                className="w-full h-9 pl-10 pr-4 rounded-full bg-thanksgiving-light border border-transparent focus:border-thanksgiving-border focus:outline-none focus:ring-0 text-sm"
-              />
-              <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-thanksgiving-secondaryText" />
-            </div>
-            <div className="flex flex-col space-y-3 py-2">
-              <Link href="/signup" className="btn-primary text-center w-full">
-                Create account
-              </Link>
-            </div>
-          </div>
-        </div>
-      )}
     </header>
   );
 };
