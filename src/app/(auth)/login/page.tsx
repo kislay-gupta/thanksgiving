@@ -7,7 +7,8 @@ import { baseUrl } from "@/constant";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import Cookies from "universal-cookie";
+import axios from "axios";
+
 const LoginPage = () => {
   const { isLoading, startLoading, stopLoading } = useLoader();
   const [formData, setFormData] = useState({
@@ -53,69 +54,32 @@ const LoginPage = () => {
 
     startLoading();
     try {
-      const response = await fetch(`${baseUrl}/api/login/`, {
-        method: "POST",
-        credentials: "include",
+      const response = await axios.post(`${baseUrl}/api/login/`, formData, {
+        withCredentials: true,
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
         },
-        body: JSON.stringify(formData),
       });
 
-      const data = await response.json();
+      const data = response.data;
       console.log("Response data structure:", data);
 
-      if (response.ok && data) {
-        const cookies = new Cookies();
-
-        const accessToken =
-          data.access ||
-          data.access_token ||
-          data.token ||
-          (data.tokens && data.tokens.access);
-
-        const refreshToken =
-          data.refresh ||
-          data.refresh_token ||
-          (data.tokens && data.tokens.refresh);
-
-        if (accessToken) {
-          console.log(
-            "Setting access token:",
-            accessToken.substring(0, 10) + "..."
-          );
-          cookies.set("access_token", accessToken, {
-            path: "/",
-            sameSite: "lax",
-          });
-        } else {
-          console.error("No access token found in response data");
-        }
-
-        if (refreshToken) {
-          console.log(
-            "Setting refresh token:",
-            refreshToken.substring(0, 10) + "..."
-          );
-          cookies.set("refresh_token", refreshToken, {
-            path: "/",
-            sameSite: "lax",
-            secure: process.env.NODE_ENV === "production",
-          });
-        }
-
-        console.log("Cookies after setting:", {
-          access: cookies.get("access_token"),
-          refresh: cookies.get("refresh_token"),
-        });
-
-        toast.success("Login successful!");
-        router.push("/");
-      }
+      toast.success("Login successful!");
+      router.push("/");
     } catch (error) {
-      console.error("Error during login:", error);
-      toast.error("An unexpected error occurred.");
+      console.log(error);
+      if (axios.isAxiosError(error)) {
+        if (error.response) {
+          const errorData = error.response.data;
+          toast.error(errorData.error || "Login failed. Please try again.");
+        } else {
+          toast.error("Network error. Please check your connection.");
+        }
+      } else {
+        console.error("Error during login:", error);
+        toast.error("An unexpected error occurred.");
+      }
     } finally {
       stopLoading();
     }
