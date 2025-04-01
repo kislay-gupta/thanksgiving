@@ -8,6 +8,7 @@ import {
   Bell,
   Bookmark,
   PlusCircleIcon,
+  X,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -17,12 +18,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Smile, MapPin, Calendar, X } from "lucide-react";
-import {
-  Image as ImageIcon,
-  Gift as GifIcon,
-  List as PollIcon,
-} from "lucide-react";
+import { Image as ImageIcon } from "lucide-react";
 import { baseUrl } from "@/constant";
 import axios from "axios";
 import { useAuth } from "@/hooks/use-auth";
@@ -208,36 +204,6 @@ const Sidebar = () => {
                           className="hidden"
                         />
                       </Label>
-                      <button
-                        type="button"
-                        className="p-2 rounded-full hover:bg-blue-50"
-                      >
-                        <GifIcon className="w-5 h-5" />
-                      </button>
-                      <button
-                        type="button"
-                        className="p-2 rounded-full hover:bg-blue-50"
-                      >
-                        <PollIcon className="w-5 h-5" />
-                      </button>
-                      <button
-                        type="button"
-                        className="p-2 rounded-full hover:bg-blue-50"
-                      >
-                        <Smile className="w-5 h-5" />
-                      </button>
-                      <button
-                        type="button"
-                        className="p-2 rounded-full hover:bg-blue-50"
-                      >
-                        <Calendar className="w-5 h-5" />
-                      </button>
-                      <button
-                        type="button"
-                        className="p-2 rounded-full hover:bg-blue-50"
-                      >
-                        <MapPin className="w-5 h-5" />
-                      </button>
                     </div>
                     <Button
                       type="button"

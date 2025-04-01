@@ -8,6 +8,8 @@ import { PostProps } from "@/interface";
 import { useFeedStore } from "@/store/feed-store";
 import useLoader from "@/hooks/user-loader";
 import PostSkeleton from "../skeletons/PostSkeleton";
+import { toast } from "sonner";
+import { redirect } from "next/navigation";
 
 const FeedPosts = () => {
   const [postsData, setPostsData] = useState<PostProps[] | null>();
@@ -26,6 +28,12 @@ const FeedPosts = () => {
       setPostsData(res.data.data);
     } catch (error) {
       console.log(error);
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 401) {
+          redirect("/login");
+        }
+        toast.error(error.message);
+      }
     } finally {
       stopLoading();
     }
