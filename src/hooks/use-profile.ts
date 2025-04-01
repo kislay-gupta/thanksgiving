@@ -30,7 +30,7 @@ export const useProfile = () => {
       console.error(error);
       if (axios.isAxiosError(error)) {
         if (error.response?.status === 401) {
-          redirect("/login");
+        
         }
         toast.error(error.message);
       }
