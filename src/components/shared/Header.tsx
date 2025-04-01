@@ -15,20 +15,20 @@ const Header: React.FC = () => {
   const { isAuthenticated, loadTokens } = useAuth();
   const pathname = usePathname();
   const [loading, setLoading] = useState(true);
-  const { refetchProfile, profileData } = useProfile();
+  const { refetchProfile, profileData, isLoading } = useProfile();
   const tokenLoad = async () => {
-    await refetchProfile();
     setLoading(true);
-    await loadTokens();
+    await loadTokens(); // Load tokens first
+    await refetchProfile(); // Then fetch profile
     setLoading(false);
   };
-  console.log("isLoading", profileData);
 
   useEffect(() => {
     tokenLoad();
-    console.log("isAuthenticated", isAuthenticated);
-  }, [pathname]); // Add pathname as a dependency to run effect on route change
+  }, [pathname]);
 
+  // Remove or comment out this console.log as it's not needed
+  // console.log("isLoading", profileData);
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-sm">
       <div className="max-w-7xl mx-auto px-4 bg-transparent  sm:px-6 flex items-center justify-between h-14">
@@ -62,16 +62,16 @@ const Header: React.FC = () => {
 
         {/* Navigation - Desktop */}
         <div className="hidden md:flex items-center space-x-4">
-          {loading ? (
+          {loading && isLoading ? (
             <Skeleton className="h-10 w-10 rounded-full" />
           ) : isAuthenticated && profileData ? (
             <div className="text-black">
               <Avatar>
                 <AvatarImage
                   src={profileData.profile_picture_url}
-                  alt="@shadcn"
+                  alt="@Profile Pic"
                 />
-                <AvatarFallback>CN</AvatarFallback>
+                <AvatarFallback className="text-blue-600">G</AvatarFallback>
               </Avatar>
             </div>
           ) : (

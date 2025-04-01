@@ -1,10 +1,11 @@
 "use client";
+import { redirect, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import Cookies from "universal-cookie";
 
 export const useAuth = () => {
   const cookies = new Cookies();
-
+  const router = useRouter();
   const [accessToken, setAccessToken] = useState<string | null>(
     () => cookies.get("accessToken") || null
   );
@@ -69,6 +70,8 @@ export const useAuth = () => {
       cookies.remove("refreshToken", { path: "/" });
       setAccessToken(null);
       setRefreshToken(null);
+      router.replace("/login");
+      console.log("Tokens removed"); // Add this line for debugging purpo
     } catch (error) {
       console.error("Error removing tokens:", error);
     }

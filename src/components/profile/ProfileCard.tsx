@@ -29,11 +29,13 @@ const ProfileCard = ({ profile, className = "" }: ProfileCardProps) => {
             <h2 className="text-2xl font-bold">{profile.fullname}</h2>
             <p className="text-gray-600">@{profile.username}</p>
             <p className="text-gray-500 text-sm">{profile.email}</p>
-            <p className="mt-3 text-gray-700">{profile.bio || "No bio yet"}</p>
+            <p className="mt-3 hidden text-gray-700">
+              {profile.bio || "No bio yet"}
+            </p>
           </div>
 
           {/* Stats Section */}
-          <div className="flex justify-center gap-8 w-full py-4 border-y">
+          <div className="hidden justify-center gap-8 w-full py-4 border-y">
             <div className="text-center">
               <div className="font-bold">{profile.posts || 0}</div>
               <div className="text-sm text-gray-600">Posts</div>
@@ -49,7 +51,7 @@ const ProfileCard = ({ profile, className = "" }: ProfileCardProps) => {
           </div>
 
           {/* Action Buttons */}
-          <div className="flex gap-3">
+          <div className=" hidden gap-3">
             <Button variant="default">Follow</Button>
             <Button variant="outline">Message</Button>
           </div>

@@ -11,13 +11,11 @@ interface AdminRouteProps {
 
 export default function AdminRoute({ children }: AdminRouteProps) {
   const { isAuthenticated, loadTokens } = useAuth();
-  console.log(isAuthenticated);
   const tokenLoad = async () => {
     await loadTokens();
   };
   useEffect(() => {
     tokenLoad();
-    console.log(isAuthenticated, "use effect");
     if (!isAuthenticated) {
       redirect("/login");
     }
