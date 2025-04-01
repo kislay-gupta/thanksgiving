@@ -78,11 +78,6 @@ const SignupPage = () => {
 
   // Validate image
   const validateImage = (file: File) => {
-    const maxSize = 5 * 1024 * 1024; // 5MB
-    if (file.size > maxSize) {
-      toast.error("Image size must be less than 5MB");
-      return false;
-    }
     if (!file.type.startsWith("image/")) {
       toast.error("Please upload a valid image file");
       return false;
@@ -215,13 +210,13 @@ const SignupPage = () => {
           <img
             src={imagePreview}
             alt="Profile"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-contain"
           />
         ) : (
-          <User className="w-20 h-20 text-gray-400" />
+          <User className="w-20 h-20 text-gray-900" />
         )}
-        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 hover:opacity-100 transition-opacity">
-          <Upload className="w-10 h-10 text-white" />
+        <div className="absolute inset-0 flex items-center justify-center bg-black/5 bg-opacity-50 opacity-0 hover:opacity-100 transition-opacity">
+          <Upload className="w-10 h-10 text-blue-600" />
         </div>
       </div>
       <input
@@ -234,7 +229,6 @@ const SignupPage = () => {
         }}
         accept="image/*"
       />
-      <p className="mt-2 text-sm text-white/70">Max image size: 5MB</p>
     </div>
   );
 
@@ -339,7 +333,7 @@ const SignupPage = () => {
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-900"
                     >
                       {showPassword ? <FaEyeSlash /> : <FaEye />}
                     </button>
@@ -422,7 +416,7 @@ const SignupPage = () => {
                       onClick={() =>
                         setShowConfirmPassword(!showConfirmPassword)
                       }
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-900"
                     >
                       {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
                     </button>
@@ -454,10 +448,6 @@ const SignupPage = () => {
             exit={{ opacity: 0, y: -20 }}
           >
             <ImagePreviewSection />
-
-            <p className="text-xs text-white/70 mt-2">
-              Upload a profile picture (optional). Max size: 5MB
-            </p>
           </motion.div>
         );
       default:

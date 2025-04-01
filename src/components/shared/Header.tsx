@@ -7,6 +7,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { usePathname } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useProfile } from "@/hooks/use-profile";
 
 const Header: React.FC = () => {
   const [searchFocused, setSearchFocused] = useState(false);
@@ -14,12 +15,14 @@ const Header: React.FC = () => {
   const { isAuthenticated, loadTokens } = useAuth();
   const pathname = usePathname();
   const [loading, setLoading] = useState(true);
-
+  const { refetchProfile, profileData } = useProfile();
   const tokenLoad = async () => {
+    await refetchProfile();
     setLoading(true);
     await loadTokens();
     setLoading(false);
   };
+  console.log("isLoading", profileData);
 
   useEffect(() => {
     tokenLoad();
@@ -61,11 +64,11 @@ const Header: React.FC = () => {
         <div className="hidden md:flex items-center space-x-4">
           {loading ? (
             <Skeleton className="h-10 w-10 rounded-full" />
-          ) : isAuthenticated ? (
+          ) : isAuthenticated && profileData ? (
             <div className="text-black">
               <Avatar>
                 <AvatarImage
-                  src="https://github.com/shadcn.png"
+                  src={profileData.profile_picture_url}
                   alt="@shadcn"
                 />
                 <AvatarFallback>CN</AvatarFallback>
