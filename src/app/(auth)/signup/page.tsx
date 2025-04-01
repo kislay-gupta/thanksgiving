@@ -23,6 +23,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/hooks/use-auth";
 
 // Define form schema with Zod
 const formSchema = z
@@ -60,7 +61,7 @@ const SignupPage = () => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
-
+  const { saveTokens } = useAuth();
   // Initialize form with defaultValues including image
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -141,6 +142,7 @@ const SignupPage = () => {
 
       // Store tokens if they're returned from the API
       if (response.data.tokens) {
+        saveTokens(response.data.tokens.access, response.data.tokens.refresh);
         localStorage.setItem("access_token", response.data.tokens.access);
         localStorage.setItem("refresh_token", response.data.tokens.refresh);
       }
