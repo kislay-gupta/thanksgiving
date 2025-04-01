@@ -1,4 +1,4 @@
-// import AdminRoute from "@/components/protected-route";
+import AdminRoute from "@/components/protected-route";
 import Sidebar from "@/components/shared/Sidebar";
 import React from "react";
 
@@ -8,7 +8,7 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   return (
-    <>
+    <AdminRoute>
       <div className="flex">
         <Sidebar />
 
@@ -16,6 +16,6 @@ export default function AdminLayout({
           {children}
         </main>
       </div>
-    </>
+    </AdminRoute>
   );
 }

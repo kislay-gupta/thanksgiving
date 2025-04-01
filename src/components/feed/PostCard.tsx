@@ -1,75 +1,60 @@
+"use client";
 import React from "react";
 import { MessageSquare, RefreshCw, Heart, Share2 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import Image from "next/image";
+import { format } from "date-fns";
 
-interface PostProps {
-  user: {
-    name: string;
-    username: string;
-    avatar: string;
-  };
-  content: string;
-  image?: string;
-  video?: boolean;
-  stats: {
-    likes: number;
-    comments: number;
-    reposts: number;
-  };
-  className?: string;
-}
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { PostProps } from "@/interface";
 
-const Post = ({ user, content, image, video, stats, className }: PostProps) => {
+const Post = ({ content, persons, id, created_at }: PostProps) => {
   return (
-    <div className={cn("border-b p-4", className)}>
-      <div className="flex flex-col items-start space-x-3">
+    <div
+      className={cn("border-b cursor-auto p-4 w-full  ")}
+      onClick={() => console.log(id)}
+    >
+      <div className="flex flex-col items-stretch  space-x-3">
         <div className="flex justify-between  w-full items-center">
           <div className="flex items-center gap-2">
-            <Image
-              src={user.avatar}
-              alt={user.name}
-              width={40}
-              height={40}
-              className="w-10 h-10 rounded-full"
-            />
+            <Avatar>
+              <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+              <AvatarFallback>CN</AvatarFallback>
+            </Avatar>
             <div className="min-w-0">
-              <div className="font-semibold truncate">{user.name}</div>
-              <div className="text-gray-300 text-sm">@{user.username}</div>
+              <div className="font-semibold truncate">{persons}</div>
+              <div className="text-gray-300 text-sm">
+                @{persons} ·{" "}
+                {format(new Date(created_at), "MM/dd/yyyy HH:mm:ss")}
+              </div>
             </div>
           </div>
           <button className="text-brand-blue font-medium">Follow ⋯</button>
         </div>
         <div>
           <p className="mt-2 text-gray-800 break-words">{content}</p>
-          {image && (
-            <div className="mt-3 rounded-xl overflow-hidden relative max-h-[512px]">
+          {/* {image && (
+            <div className="mt-3 rounded-xl overflow-hidden ">
               <Image
                 src={image}
                 alt="Post image"
-                width={800}
-                height={450}
-                className="w-full h-full object-contain"
+                className="aspect-[3/4] h-fit w-fit object-cover"
+                width={300}
+                height={400}
               />
-              {video && (
-                <div className="absolute bottom-2 right-2 bg-blue-600 text-white text-xs px-2 py-1 rounded">
-                  VIDEO
-                </div>
-              )}
             </div>
-          )}
-          <div className="flex justify-between mt-3 text-gray-500 text-sm">
+          )} */}
+          <div className="flex  w-full justify-between mt-3 text-gray-500 text-sm">
             <button className="flex items-center space-x-1">
               <Heart size={16} />
-              <span>{stats.likes}</span>
+              <span>16</span>
             </button>
             <button className="flex items-center space-x-1">
               <MessageSquare size={16} />
-              <span>{stats.comments}</span>
+              <span>42</span>
             </button>
             <button className="flex items-center space-x-1">
               <RefreshCw size={16} />
-              <span>{stats.reposts}</span>
+              <span>8</span>z
             </button>
             <button>
               <Share2 size={16} />

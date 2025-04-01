@@ -10,10 +10,10 @@ interface AdminRouteProps {
 }
 
 export default function AdminRoute({ children }: AdminRouteProps) {
-  const { isAuthenticated, loadToken } = useAuth();
+  const { isAuthenticated, loadTokens } = useAuth();
   console.log(isAuthenticated);
   const tokenLoad = async () => {
-    await loadToken();
+    await loadTokens();
   };
   useEffect(() => {
     tokenLoad();

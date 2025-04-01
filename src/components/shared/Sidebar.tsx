@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import React from "react";
 import {
@@ -24,14 +25,18 @@ import {
 } from "lucide-react";
 import { baseUrl } from "@/constant";
 import axios from "axios";
-import Cookie from "universal-cookie";
+import { useAuth } from "@/hooks/use-auth";
+import { useFeedStore } from "@/store/feed-store";
+import useLoader from "@/hooks/user-loader";
+
 const Sidebar = () => {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = React.useState(false);
   const [postContent, setPostContent] = React.useState("");
   const [files, setFiles] = React.useState<File[]>([]);
   const [previews, setPreviews] = React.useState<string[]>([]);
-  const cookie = new Cookie();
+  const { isLoading, startLoading, stopLoading } = useLoader();
+  const { accessToken } = useAuth();
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const newFiles = Array.from(e.target.files);
@@ -51,10 +56,16 @@ const Sidebar = () => {
     setFiles(newFiles);
     setPreviews(newPreviews);
   };
+  const { setShouldRefetch } = useFeedStore();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(cookie.get("access_token"));
+    startLoading();
+    if (!accessToken) {
+      console.error("No access token available");
+      return;
+    }
+
     try {
       const response = await axios.post(
         `${baseUrl}/api/messages/`,
@@ -62,18 +73,31 @@ const Sidebar = () => {
         {
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
           },
-          withCredentials: true,
         }
       );
 
       console.log("Post created:", response.data);
+
+      // Trigger refetch
+      setShouldRefetch(true);
+
       setIsOpen(false);
       setPostContent("");
       setFiles([]);
       setPreviews([]);
-    } catch (error) {
-      console.error("Error creating post:", error);
+    } catch (error: any) {
+      if (error.response?.data?.code === "token_not_valid") {
+        // Handle token expiration
+        // You might want to trigger a token refresh here
+        console.error("Token expired. Please login again");
+        // Consider implementing a refresh token mechanism or redirecting to login
+      } else {
+        console.error("Error creating post:", error);
+      }
+    } finally {
+      stopLoading();
     }
   };
 
@@ -218,7 +242,7 @@ const Sidebar = () => {
                     <Button
                       type="button"
                       className="rounded-full px-4 font-bold"
-                      disabled={!postContent && files.length === 0}
+                      disabled={isLoading && !postContent && files.length === 0}
                       onClick={handleSubmit}
                     >
                       Post

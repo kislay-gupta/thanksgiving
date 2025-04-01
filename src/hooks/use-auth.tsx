@@ -1,99 +1,87 @@
-// app/hooks/useAuth.js
 "use client";
-
 import { useState, useEffect } from "react";
 import Cookies from "universal-cookie";
 
 export const useAuth = () => {
-  // Create an instance of universal-cookie
   const cookies = new Cookies();
 
-  // Function to get the access token from cookies
-  const getToken = () => {
+  const [accessToken, setAccessToken] = useState<string | null>(
+    () => cookies.get("accessToken") || null
+  );
+  const [refreshToken, setRefreshToken] = useState<string | null>(
+    () => cookies.get("refreshToken") || null
+  );
+
+  const saveTokens = async (
+    newAccessToken: string,
+    newRefreshToken: string
+  ) => {
     try {
-      const accessToken = cookies.get("access_token");
-      console.log("Raw access token:", accessToken);
-
-      // Validate token to ensure it exists and is not a falsy value
-      if (
-        accessToken &&
-        accessToken !== "undefined" &&
-        accessToken !== "null" &&
-        accessToken.trim() !== ""
-      ) {
-        return accessToken;
+      if (!newAccessToken || !newRefreshToken) {
+        throw new Error("Tokens cannot be null or undefined");
       }
-      return null;
+
+      // Set access token cookie - shorter lifetime
+      cookies.set("accessToken", newAccessToken, {
+        path: "/",
+        // 15 minutes in seconds
+        secure: true,
+        sameSite: "strict",
+      });
+
+      // Set refresh token cookie - longer lifetime
+      cookies.set("refreshToken", newRefreshToken, {
+        path: "/",
+        maxAge: 7 * 24 * 60 * 60, // 7 days in seconds
+        secure: true,
+        sameSite: "strict",
+      });
+
+      setAccessToken(newAccessToken);
+      setRefreshToken(newRefreshToken);
     } catch (error) {
-      console.error("Error retrieving token:", error);
-      return null;
+      console.error("Error saving tokens:", error);
+      throw error;
     }
   };
 
-  // Initialize state with the token from cookies
-  const [token, setToken] = useState(() => getToken());
-
-  // Use an effect to periodically check if the token has changed
-  useEffect(() => {
-    const checkToken = () => {
-      const currentToken = getToken();
-      console.log("Current token in useEffect:", currentToken);
-
-      if (currentToken !== token) {
-        setToken(currentToken);
-      }
-    };
-
-    // Check token every second
-    const intervalId = setInterval(checkToken, 1000);
-
-    // Run an initial check
-    checkToken();
-
-    // Cleanup the interval on component unmount
-    return () => clearInterval(intervalId);
-  }, [token]);
-
-  // Function to explicitly reload the token
-  const loadToken = () => {
-    const storedToken = getToken();
-    console.log("Loading token:", storedToken);
-    if (storedToken) {
-      setToken(storedToken);
-    }
-    return storedToken;
-  };
-
-  // Function to remove the tokens from cookies (simulate logout)
-  const removeToken = () => {
+  const loadTokens = async () => {
     try {
-      // Remove tokens with the path specified
-      cookies.remove("access_token", { path: "/" });
-      cookies.remove("refresh_token", { path: "/" });
-      setToken(null);
-      console.log("Tokens removed");
+      const storedAccessToken = cookies.get("accessToken");
+      const storedRefreshToken = cookies.get("refreshToken");
+
+      if (storedAccessToken) setAccessToken(storedAccessToken);
+      if (storedRefreshToken) setRefreshToken(storedRefreshToken);
+
+      return {
+        accessToken: storedAccessToken,
+        refreshToken: storedRefreshToken,
+      };
     } catch (error) {
-      console.error("Error removing token:", error);
+      console.error("Error loading tokens:", error);
+      return { accessToken: null, refreshToken: null };
     }
   };
 
-  // Check authentication based on the current token
-  const isAuthenticated = (() => {
-    const currentToken = getToken();
-    const authenticated =
-      !!currentToken &&
-      currentToken !== "undefined" &&
-      currentToken !== "null" &&
-      currentToken.trim() !== "";
-    console.log("Is Authenticated:", authenticated);
-    console.log("Current Token:", currentToken);
-    return authenticated;
-  })();
+  const removeTokens = async () => {
+    try {
+      cookies.remove("accessToken", { path: "/" });
+      cookies.remove("refreshToken", { path: "/" });
+      setAccessToken(null);
+      setRefreshToken(null);
+    } catch (error) {
+      console.error("Error removing tokens:", error);
+    }
+  };
+
+  useEffect(() => {}, [accessToken, refreshToken]);
 
   return {
-    token,
-    loadToken,
-    removeToken,
-    isAuthenticated,
+    accessToken,
+    refreshToken,
+    saveTokens,
+    loadTokens,
+    removeTokens,
+    isAuthenticated: Boolean(accessToken),
   };
 };

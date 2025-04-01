@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import axios from "axios";
+import { useAuth } from "@/hooks/use-auth";
 
 const LoginPage = () => {
   const { isLoading, startLoading, stopLoading } = useLoader();
@@ -17,7 +18,7 @@ const LoginPage = () => {
   });
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
-
+  const { saveTokens } = useAuth();
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -64,7 +65,7 @@ const LoginPage = () => {
 
       const data = response.data;
       console.log("Response data structure:", data);
-
+      await saveTokens(data.tokens.access, data.tokens.refresh);
       toast.success("Login successful!");
       router.push("/");
     } catch (error) {

@@ -125,7 +125,23 @@
   * {
     @apply border-border;
   }
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
 
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Light background */
+    border-radius: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #007bff; /* Blue color */
+    border-radius: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #0056b3; /* Darker blue on hover */
+  }
   body {
     @apply bg-background text-foreground font-sans;
     -webkit-font-smoothing: antialiased;
@@ -161,7 +177,7 @@
   .user-avatar {
     @apply rounded-full border-2 border-border overflow-hidden;
   }
-  
+
   .sidebar-link-active {
     @apply bg-thanksgiving-light text-thanksgiving-text;
   }

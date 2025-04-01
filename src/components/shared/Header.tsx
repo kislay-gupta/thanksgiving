@@ -1,12 +1,30 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SearchIcon, Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import { useAuth } from "@/hooks/use-auth";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { usePathname } from "next/navigation";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const Header: React.FC = () => {
   const [searchFocused, setSearchFocused] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { isAuthenticated, loadTokens } = useAuth();
+  const pathname = usePathname();
+  const [loading, setLoading] = useState(true);
+
+  const tokenLoad = async () => {
+    setLoading(true);
+    await loadTokens();
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    tokenLoad();
+    console.log("isAuthenticated", isAuthenticated);
+  }, [pathname]); // Add pathname as a dependency to run effect on route change
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-sm">
@@ -41,15 +59,31 @@ const Header: React.FC = () => {
 
         {/* Navigation - Desktop */}
         <div className="hidden md:flex items-center space-x-4">
-          <Link
-            href="/login"
-            className="text-thanksgiving-blue hover:text-thanksgiving-darkBlue transition-colors px-4 py-1 rounded-full text-sm font-medium"
-          >
-            Log in
-          </Link>
-          <Link href="/signup" className="btn-primary text-sm">
-            Create account
-          </Link>
+          {loading ? (
+            <Skeleton className="h-10 w-10 rounded-full" />
+          ) : isAuthenticated ? (
+            <div className="text-black">
+              <Avatar>
+                <AvatarImage
+                  src="https://github.com/shadcn.png"
+                  alt="@shadcn"
+                />
+                <AvatarFallback>CN</AvatarFallback>
+              </Avatar>
+            </div>
+          ) : (
+            <>
+              <Link
+                href="/login"
+                className="text-thanksgiving-blue hover:text-thanksgiving-darkBlue transition-colors px-4 py-1 rounded-full text-sm font-medium"
+              >
+                Log in
+              </Link>
+              <Link href="/signup" className="btn-primary text-sm">
+                Create account
+              </Link>
+            </>
+          )}
         </div>
 
         {/* Mobile menu button */}
