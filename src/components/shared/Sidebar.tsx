@@ -12,7 +12,7 @@ import {
   Settings,
 } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { redirect, usePathname } from "next/navigation";
 import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -71,6 +71,7 @@ const Sidebar = () => {
     // Implement logout logic here
     try {
       await removeTokens();
+      redirect("/login");
     } catch (error) {
       console.error("Error logging out:", error);
     } finally {

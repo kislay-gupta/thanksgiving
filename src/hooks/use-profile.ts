@@ -6,7 +6,6 @@ import useLoader from "./user-loader";
 import { toast } from "sonner";
 import { baseUrl } from "@/constant";
 import { usePathname } from "next/navigation";
-// import { redirect } from "next/navigation";
 
 export const useProfile = () => {
   const [profileData, setProfileData] = useState<ProfileData | null>(null);
@@ -15,6 +14,8 @@ export const useProfile = () => {
   const pathname = usePathname();
 
   const handleToken = async () => {
+    // Skip loading tokens on login and signup pages
+    if (pathname === "/login" || pathname === "/signup") return;
     await loadTokens();
   };
 
@@ -23,7 +24,8 @@ export const useProfile = () => {
   }, [pathname]);
 
   const fetchProfile = async () => {
-    if (!accessToken) return;
+    // Skip fetching profile on login and signup pages
+    if (!accessToken || pathname === "/login" || pathname === "/signup") return;
 
     startLoading();
     const token = accessToken;
@@ -53,7 +55,7 @@ export const useProfile = () => {
 
   useEffect(() => {
     fetchProfile();
-  }, [accessToken]);
+  }, [accessToken, pathname]);
 
   return {
     profileData,

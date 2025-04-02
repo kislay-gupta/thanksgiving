@@ -16,7 +16,14 @@ const Header: React.FC = () => {
   const pathname = usePathname();
   const [loading, setLoading] = useState(true);
   const { refetchProfile, profileData, isLoading } = useProfile();
+  
   const tokenLoad = async () => {
+    // Skip loading tokens and profile data on login and signup pages
+    if (pathname === "/login" || pathname === "/signup") {
+      setLoading(false);
+      return;
+    }
+    
     setLoading(true);
     await loadTokens(); // Load tokens first
     await refetchProfile(); // Then fetch profile
@@ -27,8 +34,6 @@ const Header: React.FC = () => {
     tokenLoad();
   }, [pathname]);
 
-  // Remove or comment out this console.log as it's not needed
-  // console.log("isLoading", profileData);
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-sm">
       <div className="max-w-7xl mx-auto px-4 bg-transparent  sm:px-6 flex items-center justify-between h-14">

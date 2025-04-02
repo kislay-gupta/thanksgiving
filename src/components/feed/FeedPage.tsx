@@ -20,7 +20,7 @@ const FeedPosts = () => {
     const token = accessToken;
     startLoading();
     try {
-      const res = await axios.get(`${baseUrl}/api/messages/`, {
+      const res = await axios.get(`${baseUrl}/api/admin/messages/`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
