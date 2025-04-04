@@ -3,9 +3,9 @@ import { Geist, Geist_Mono } from "next/font/google";
 import NextTopLoader from "nextjs-toploader";
 
 import "./globals.css";
-import Header from "@/components/shared/Header";
 import { Toaster } from "@/components/ui/sonner";
 // import Sidebar from "@/components/shared/Sidebar";
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -30,10 +30,9 @@ export default function RootLayout({
       <body className="bg-white">
         <NextTopLoader />
         <Toaster expand position="top-right" richColors />
-        <Header />
-        <div className="flex min-h-screen pt-14">
+        <div className=" min-h-screen ">
           {/* <Sidebar /> */}
-          <main className="flex-1">{children}</main>
+          <main className="flex-1 ">{children}</main>
         </div>
       </body>
     </html>

@@ -10,7 +10,8 @@ import { PostProps } from "@/interface";
 const Post = ({ content, persons, id, created_at }: PostProps) => {
   return (
     <div
-      className={cn("border-b cursor-auto p-4 w-full  ")}
+      className={cn("border-b cursor-auto my-2 rounded p-4 w-full  ")}
+      style={{ boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)" }}
       onClick={() => console.log(id)}
     >
       <div className="flex flex-col items-stretch  space-x-3">

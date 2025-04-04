@@ -9,7 +9,6 @@ import {
   Bookmark,
   PlusCircleIcon,
   X,
-  Settings,
 } from "lucide-react";
 import Link from "next/link";
 import { redirect, usePathname } from "next/navigation";
@@ -25,14 +24,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { useFeedStore } from "@/store/feed-store";
 import useLoader from "@/hooks/user-loader";
 import { toast } from "sonner";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+
 import LogoutModal from "@/components/modals/LogoutModal";
 
 const Sidebar = () => {
@@ -133,8 +125,8 @@ const Sidebar = () => {
   ];
 
   return (
-    <aside className="fixed md:relative bottom-0 left-0 right-0 md:bottom-auto  bg-white md:bg-transparent z-50 md:flex flex-col border-r h-auto md:h-[calc(100vh-4rem)] md:sticky md:top-16 w-full md:w-16 items-center py-2 md:py-4">
-      <div className="max-w-screen-sm  mx-auto px-4 md:px-0 md:w-auto flex md:flex-col justify-between md:justify-start ">
+    <aside className="fixed md:hidden bottom-0 left-0 right-0 md:bottom-auto bg-white z-50 flex flex-col border-r h-auto w-full items-center py-2">
+      <div className="w-full mx-auto px-4 md:px-0 md:w-auto flex md:flex-col justify-between md:justify-start">
         {menuItems.map((item, index) => (
           <Link
             key={index}
@@ -238,24 +230,6 @@ const Sidebar = () => {
             </div>
           </DialogContent>
         </Dialog>
-      </div>
-
-      <div className="flex justify-end mt-auto items-end">
-        <DropdownMenu>
-          <DropdownMenuTrigger className="cursor-pointer">
-            <Settings />
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuLabel>My Account</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <Link href="/profile">Profile</Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setIsLogoutModalOpen(true)}>
-              Log out
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
       </div>
 
       <LogoutModal
