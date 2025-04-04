@@ -5,6 +5,7 @@ import NextTopLoader from "nextjs-toploader";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 // import Sidebar from "@/components/shared/Sidebar";
+import Footer from "@/components/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,6 +35,7 @@ export default function RootLayout({
           {/* <Sidebar /> */}
           <main className="flex-1 ">{children}</main>
         </div>
+        <Footer />
       </body>
     </html>
   );
